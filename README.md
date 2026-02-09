@@ -31,5 +31,4 @@ receive step-by-step explanations, collaborate with peers, and confirm when thei
 2. Open `index.html` in a browser
 3. Sign up with multiple users to test features
 
-## Course
-Digital Thinking and Innovation
+
