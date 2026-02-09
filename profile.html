@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PeerLift | Profile</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<h2>User Profile</h2>
+
+<div class="profile-box">
+
+  <h3>Basic Details</h3>
+  <p><b>Name:</b> <span id="name"></span></p>
+  <p><b>Roll Number:</b> <span id="roll"></span></p>
+  <p><b>Department:</b> <span id="department"></span></p>
+  <p><b>Year:</b> <span id="year"></span></p>
+
+  <hr>
+
+  <h3>Academic Profile</h3>
+  <label>Strong Subjects (comma separated)</label>
+  <input type="text" id="strongSubjects" placeholder="eg: DSA, DBMS">
+
+  <label>Weak Subjects (comma separated)</label>
+  <input type="text" id="weakSubjects" placeholder="eg: FLAT, CO">
+
+  <hr>
+
+  <h3>Skills (Non-Academic)</h3>
+  <input type="text" id="skills" placeholder="eg: Web Dev, Python">
+
+  <label>Skill Level</label>
+  <select id="skillLevel">
+    <option>Beginner</option>
+    <option>Intermediate</option>
+    <option>Advanced</option>
+  </select>
+
+  <hr>
+
+  <h3>Profile Photo</h3>
+  <input type="file" id="photo">
+
+  <br><br>
+  <button onclick="saveProfile()">Save Profile</button>
+
+  <hr>
+
+  <h3>Contribution Stats</h3>
+  <p><b>Doubts Asked:</b> <span id="asked"></span></p>
+  <p><b>Doubts Solved:</b> <span id="solved"></span></p>
+  <p><b>Total Points:</b> <span id="points"></span></p>
+
+</div>
+
+<script>
+  const user = JSON.parse(localStorage.getItem("user"));
+  let users = JSON.parse(localStorage.getItem("users")) || [];
+  const doubts = JSON.parse(localStorage.getItem("doubts")) || [];
+
+  if (!user) {
+    window.location.href = "index.html";
+  }
+
+  let currentUser = users.find(u => u.roll === user.roll);
+
+  // show basic details
+  document.getElementById("name").innerText = currentUser.name;
+  document.getElementById("roll").innerText = currentUser.roll;
+  document.getElementById("department").innerText = currentUser.department;
+  document.getElementById("year").innerText = currentUser.year;
+
+  // prefill editable fields
+  document.getElementById("strongSubjects").value = currentUser.strongSubjects || "";
+  document.getElementById("weakSubjects").value = currentUser.weakSubjects || "";
+  document.getElementById("skills").value = currentUser.skills || "";
+  document.getElementById("skillLevel").value = currentUser.skillLevel || "Beginner";
+
+  // stats
+  document.getElementById("asked").innerText =
+    doubts.filter(d => d.askedBy === user.roll).length;
+
+  document.getElementById("solved").innerText =
+    doubts.filter(d => d.solvedBy === user.roll).length;
+
+  document.getElementById("points").innerText = currentUser.points || 0;
+
+  // save profile
+  function saveProfile() {
+    currentUser.strongSubjects = document.getElementById("strongSubjects").value;
+    currentUser.weakSubjects = document.getElementById("weakSubjects").value;
+    currentUser.skills = document.getElementById("skills").value;
+    currentUser.skillLevel = document.getElementById("skillLevel").value;
+
+    users = users.map(u => u.roll === currentUser.roll ? currentUser : u);
+
+    localStorage.setItem("users", JSON.stringify(users));
+    localStorage.setItem("user", JSON.stringify(currentUser));
+
+    alert("Profile updated successfully!");
+  }
+</script>
+
+</body>
+</html>

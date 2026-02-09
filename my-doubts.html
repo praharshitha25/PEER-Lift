@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PeerLift | My Doubts</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<h2>My Doubts</h2>
+<div id="doubts"></div>
+
+<script>
+let doubts = JSON.parse(localStorage.getItem("doubts")) || [];
+let currentUser = JSON.parse(localStorage.getItem("user"));
+let users = JSON.parse(localStorage.getItem("users")) || [];
+
+let html = "";
+
+// ✅ SHOW ONLY MY DOUBTS (ROLL NUMBER BASED)
+doubts
+  .filter(d => d.askedBy === currentUser.roll)
+  .forEach((d, index) => {
+    html += `
+      <div class="doubt-box">
+        <p><b>${d.subject}</b>: ${d.question}</p>
+        <p>Status: ${d.resolved ? "Resolved" : "Pending"}</p>
+
+        ${
+  d.resolved
+    ? `
+      <p><b>Answer:</b></p>
+      <p>${d.answer || "No answer recorded."}</p>
+      <p><b>Status:</b> Resolved</p>
+    `
+    : d.helped
+      ? `
+        <p><b>Answer:</b></p>
+        <p>${d.answer || "Answer provided in chat."}</p>
+        <button onclick="markResolved(${index})">Mark as Resolved</button>
+      `
+      : `<span><i>Waiting for someone to help…</i></span>`
+}
+
+
+      </div>
+      <hr>
+    `;
+  });
+
+if (html === "") {
+  html = "<p>You have not posted any doubts yet.</p>";
+}
+
+document.getElementById("doubts").innerHTML = html;
+
+// ✅ ASKER CONFIRMS RESOLUTION
+function markResolved(index) {
+  let doubts = JSON.parse(localStorage.getItem("doubts")) || [];
+  let users = JSON.parse(localStorage.getItem("users")) || [];
+
+  const doubt = doubts[index];
+
+  if (doubt.resolved === true) {
+    alert("This doubt is already resolved");
+    return;
+  }
+
+  if (!doubt.solvedBy) {
+    alert("No one has helped this doubt yet");
+    return;
+  }
+
+  // mark resolved
+  doubt.resolved = true;
+
+  // reward HELPER using roll number
+  users = users.map(u => {
+    if (u.roll === doubt.solvedBy) {
+      u.points = (u.points || 0) + 10;
+      u.doubtsSolved = (u.doubtsSolved || 0) + 1;
+    }
+    return u;
+  });
+
+  localStorage.setItem("doubts", JSON.stringify(doubts));
+  localStorage.setItem("users", JSON.stringify(users));
+
+  alert("Doubt marked as resolved. Helper rewarded!");
+  location.reload();
+}
+</script>
+
+</body>
+</html>
+

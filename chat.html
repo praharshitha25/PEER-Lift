@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PeerLift | Chat</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<h2>PeerLift – Doubt Discussion</h2>
+
+<div id="chatHeader"></div>
+
+<div class="chat-box">
+  <div id="messages" class="messages">
+    <p><i>This is a prototype chat. Messages are not permanently stored.</i></p>
+  </div>
+
+  <textarea id="messageInput" placeholder="Type your explanation here..."></textarea>
+  <br><br>
+  <button onclick="sendMessage()">Send</button>
+</div>
+
+<br>
+<button onclick="goBack()">Back</button>
+
+<script>
+  const currentUser = JSON.parse(localStorage.getItem("user"));
+  const chatWith = localStorage.getItem("chatWith");
+  let doubts = JSON.parse(localStorage.getItem("doubts")) || [];
+
+  // find the active doubt
+  const doubtIndex = doubts.findIndex(
+    d => d.askedBy === chatWith && d.solvedBy === currentUser.roll
+  );
+
+  if (doubtIndex === -1) {
+    alert("No doubt found for this chat");
+    window.location.href = "dashboard.html";
+  }
+
+  document.getElementById("chatHeader").innerHTML = `
+    <p><b>Helper:</b> ${currentUser.roll} | <b>Asker:</b> ${chatWith}</p>
+  `;
+
+  function sendMessage() {
+    const msgInput = document.getElementById("messageInput");
+    const msg = msgInput.value.trim();
+
+    if (msg === "") {
+      alert("Type an explanation");
+      return;
+    }
+
+    // ✅ SAVE ANSWER
+    doubts[doubtIndex].answer = msg;
+    doubts[doubtIndex].helped = true;
+
+    localStorage.setItem("doubts", JSON.stringify(doubts));
+
+    document.getElementById("messages").innerHTML += `
+      <p><b>${currentUser.roll}:</b> ${msg}</p>
+    `;
+
+    msgInput.value = "";
+  }
+
+  function goBack() {
+    window.history.back();
+  }
+</script>
+
+</body>
+</html>

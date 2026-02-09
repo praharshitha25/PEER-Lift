@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PeerLift | View Doubts</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<h2>View Doubts (Help Others)</h2>
+<div id="doubts"></div>
+
+<script>
+let doubts = JSON.parse(localStorage.getItem("doubts")) || [];
+let currentUser = JSON.parse(localStorage.getItem("user"));
+
+let html = "";
+
+// ✅ SHOW ONLY DOUBTS ASKED BY OTHER USERS (ROLL NUMBER BASED)
+doubts
+  .filter(d => d.askedBy !== currentUser.roll)
+  .forEach((d, index) => {
+    html += `
+      <div class="doubt-box">
+        <p><b>${d.subject}</b>: ${d.question}</p>
+        <p>Status: ${d.resolved ? "Resolved" : "Pending"}</p>
+
+        ${
+          d.resolved
+            ? `<span><i>Already Resolved</i></span>`
+            : `<button onclick="helpDoubt(${index})">Help / Chat</button>`
+        }
+      </div>
+      <hr>
+    `;
+  });
+
+if (html === "") {
+  html = "<p>No doubts from other students right now.</p>";
+}
+
+document.getElementById("doubts").innerHTML = html;
+
+// ✅ HELPER ACTION
+function helpDoubt(index) {
+  let doubts = JSON.parse(localStorage.getItem("doubts")) || [];
+  let currentUser = JSON.parse(localStorage.getItem("user"));
+
+  // safety check
+  if (doubts[index].resolved) {
+    alert("This doubt is already resolved");
+    return;
+  }
+
+  // ✅ MARK AS HELPED (THIS IS THE IMPORTANT PART)
+  doubts[index].solvedBy = currentUser.roll;
+  doubts[index].helped = true;
+
+  // save changes
+  localStorage.setItem("doubts", JSON.stringify(doubts));
+
+  // open chat with asker
+  localStorage.setItem("chatWith", doubts[index].askedBy);
+  window.location.href = "chat.html";
+}
+
+</script>
+
+</body>
+</html>

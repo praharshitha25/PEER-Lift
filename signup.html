@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PeerLift | Sign Up</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="login-box">
+  <h1>PeerLift</h1>
+  <p>Create your account</p>
+
+  <input type="text" id="name" placeholder="Full Name">
+  <input type="text" id="roll" placeholder="Roll Number">
+
+  <select id="department">
+    <option value="">Select Department</option>
+    <option>CSE</option>
+    <option>ECE</option>
+    <option>EEE</option>
+  </select>
+
+  <select id="year">
+    <option value="">Select Year</option>
+    <option>1st Year</option>
+    <option>2nd Year</option>
+    <option>3rd Year</option>
+    <option>4th Year</option>
+  </select>
+
+  <input type="password" id="password" placeholder="Password">
+
+  <button onclick="signup()">Sign Up</button>
+
+  <p style="margin-top:10px;">
+    Already have an account?
+    <a href="index.html">Login here</a>
+  </p>
+</div>
+
+<script src="js/auth.js"></script>
+</body>
+</html>

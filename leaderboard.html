@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PeerLift | Leaderboard</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<h2>Leaderboard</h2>
+
+<div id="leaderboard"></div>
+
+<script>
+  const leaderboardDiv = document.getElementById("leaderboard");
+  let users = JSON.parse(localStorage.getItem("users")) || [];
+
+  if (users.length === 0) {
+    leaderboardDiv.innerHTML = "<p>No users available yet.</p>";
+  } else {
+    // sort by points (descending)
+    users.sort((a, b) => (b.points || 0) - (a.points || 0));
+
+    let html = "";
+
+    users.forEach((u, index) => {
+      let badge = "";
+      if (index === 0) badge = "🏆";
+      else if (index === 1) badge = "🥈";
+      else if (index === 2) badge = "🥉";
+
+      html += `
+        <div class="leaderboard-item">
+          <p><strong>${index + 1}. ${u.name}</strong> (${u.roll}) ${badge}</p>
+          <p>Points: ${u.points || 0} | Doubts Solved: ${u.doubtsSolved || 0}</p>
+          <hr>
+        </div>
+      `;
+    });
+
+    leaderboardDiv.innerHTML = html;
+  }
+</script>
+
+</body>
+</html>

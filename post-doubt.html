@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PeerLift | Post a Doubt</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<h2>Post a Doubt</h2>
+
+<input id="subject" placeholder="Subject">
+<textarea id="question" placeholder="Enter your doubt"></textarea>
+
+<label>
+  <input type="checkbox" id="comfort"> Comfort Mode (Step-by-step)
+</label>
+
+<select id="pace">
+  <option>Very Basic</option>
+  <option>Medium</option>
+  <option>Exam Oriented</option>
+</select>
+
+<label>
+  <input type="checkbox" id="anon"> Post Anonymously
+</label>
+
+<br><br>
+<button onclick="postDoubt()">Submit</button>
+
+<script src="js/doubts.js"></script>
+</body>
+</html>
+
